@@ -1,0 +1,138 @@
+# Show Tables
+
+<Tabs tabs={["Example", "Prompt",  "Code"]}>
+  <Example block="examples.table"/>
+   <div class="demo-prompt">Show me a table of the users.</div>
+```ts
+const fn = async function (args: Args) {
+  let sql = `SELECT id, name, email FROM users LIMIT 100`;
+  let results = await args.query(sql);
+  return args.table(results);
+};
+```
+ 
+</Tabs>
+
+---
+
+## Create a table with filters
+
+- Query Execution: It runs an SQL query to select all records from the users table where the creationDate is within a specified date range (dateStart to dateEnd). The query parameters are taken from req.form.
+- Result Processing: It awaits the result of the query.
+- Result Handling: It passes the query result to the table method of the args parameter and returns the processed res
+
+<Tabs tabs={["Example", "Prompt",  "Code"]}>
+  <Example block="examples.form"/>
+   <div class="demo-prompt">Show me a table of the users created between the given dates.</div>
+```ts
+const fn = async function (args: Args) {
+  let result = await req.query(`SELECT * FROM users WHERE creationDate >= :dateStart and creationDate <= :dateEnd`, req.form);
+  return args.table(result);
+};
+```
+ 
+</Tabs>
+
+---
+
+## Show custom HTML
+
+This function is likely used in a web application to fetch and display a list of users in a formatted table, including visual indicators for user status and avatars. The function leverages asynchronous operations to handle database queries and processes the data into a structure suitable for frontend display.
+
+<Tabs tabs={["Example", "Prompt",  "Code"]}>
+  <Example block="examples.table.html"/>
+   <div class="demo-prompt">Show me the users id, email, an HTML avatar (first letter of the name), and an HTML status (active or inactive), then returns the results using a table method provided in the args.</div>
+```ts
+  const fn = async function (args: Args) {
+  let sql = 'SELECT * FROM  users limit 5';
+  let results = await args.query(sql);
+  results = results.map(row => ({
+    id: row.id,
+    avatar: {
+      html: '<div class="demo-avatar">' + row.name[0] + '</div>',
+    },
+    email: row.email,
+    status: {
+      html: row.status == 1 ? '<div class="demo-active">Active</div>'
+    :'<div class="demo-inactive">Inactive</div>' ,
+    },
+  }));
+  return args.table(results);
+};
+```
+
+</Tabs>
+
+## Tutorial
+
+### Step 1 - Get the start and end dates from the form
+
+Get the start and end dates from the form: The fn function expects to receive the start and end dates from the form provided in args.form.
+
+```ts { 2 }
+const fn = async function (args: Args) {
+  const { startDate, endDate } = args.form;
+};
+```
+
+---
+
+### Step 2 - Build the SQL query
+
+Build the SQL query: Use the provided dates to construct the SQL query that will select the data from the database according to the date range.
+
+```ts { 3,4,5,6,7,8 }
+const fn = async function (args: Args) {
+  const { startDate, endDate } = args.form;
+  const sql = `
+    SELECT * 
+    FROM table 
+    WHERE date BETWEEN :startDate AND :endDate
+  `;
+  const replacements = { startDate, endDate };
+};
+```
+
+---
+
+### Step 3 - Execute the query and get the results
+
+Execute the query and get the results: Use the query method provided in args to execute the SQL query and get the data from the database.
+
+```ts { 10 }
+const fn = async function (args: Args) {
+  const { startDate, endDate } = args.form;
+  const sql = `
+    SELECT * 
+    FROM table 
+    WHERE date BETWEEN :startDate AND :endDate
+  `;
+  const replacements = { startDate, endDate };
+
+  const rows = await args.query(sql, replacements);
+};
+```
+
+---
+
+### Step 4 - Display the results
+
+Display the results: Use the table method provided in args to send the query results as a table response.
+
+```ts {12}
+const fn = async function (args: Args) {
+  const { startDate, endDate } = args.form;
+  const sql = `
+    SELECT * 
+    FROM table 
+    WHERE date BETWEEN :startDate AND :endDate
+  `;
+  const replacements = { startDate, endDate };
+
+  const rows = await args.query(sql, replacements);
+
+  return args.table(rows);
+};
+```
+
+With these steps, you can complete the fn function to show the results in a table filtered by start and end dates. Make sure to adjust the code according to your application's specifications and structure.

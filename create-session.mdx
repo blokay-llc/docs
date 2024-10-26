@@ -1,0 +1,30 @@
+# Create Sessions
+
+A session is a way to authenticate a user and get a token that can be used to access the Blokay platform.
+
+## Create JWT for your own
+
+```js
+import jwt from "jsonwebtoken";
+
+const getJWT = () => {
+  return jwt.sign(
+    {
+      data: {
+        id: this.id,
+        name: this.name,
+        extra1: "YOUR_OWN_DATA",
+      },
+    },
+    `blokay-YOUR-PRIVATE-KEY`, // your private token
+    {
+      expiresIn: "1h", // session expires in
+    }
+  );
+};
+```
+
+---
+
+<Link label="How to create ChartLines" href="/docs/show-chart" />
+<Link label="How to create Table" href="/docs/show-table" />
