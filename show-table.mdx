@@ -4,10 +4,10 @@
   <Example block="examples.table"/>
    <div class="demo-prompt">Show me a table of the users.</div>
 ```ts
-const fn = async function (args: Args) {
+const fn = async function (req: Request, res: Response) {
   let sql = `SELECT id, name, email FROM users LIMIT 100`;
-  let results = await args.query(sql);
-  return args.table(results);
+  let results = await req.query(sql);
+  return res.table(results);
 };
 ```
  
@@ -19,15 +19,15 @@ const fn = async function (args: Args) {
 
 - Query Execution: It runs an SQL query to select all records from the users table where the creationDate is within a specified date range (dateStart to dateEnd). The query parameters are taken from req.form.
 - Result Processing: It awaits the result of the query.
-- Result Handling: It passes the query result to the table method of the args parameter and returns the processed res
+- Result Handling: It passes the query result to the table method of the res parameter and returns the processed res
 
 <Tabs tabs={["Example", "Prompt",  "Code"]}>
   <Example block="examples.form"/>
    <div class="demo-prompt">Show me a table of the users created between the given dates.</div>
 ```ts
-const fn = async function (args: Args) {
+const fn = async function (req: Request, res: Response) {
   let result = await req.query(`SELECT * FROM users WHERE creationDate >= :dateStart and creationDate <= :dateEnd`, req.form);
-  return args.table(result);
+  return res.table(result);
 };
 ```
  
@@ -41,11 +41,11 @@ This function is likely used in a web application to fetch and display a list of
 
 <Tabs tabs={["Example", "Prompt",  "Code"]}>
   <Example block="examples.table.html"/>
-   <div class="demo-prompt">Show me the users id, email, an HTML avatar (first letter of the name), and an HTML status (active or inactive), then returns the results using a table method provided in the args.</div>
+   <div class="demo-prompt">Show me the users id, email, an HTML avatar (first letter of the name), and an HTML status (active or inactive), then returns the results using a table method provided in the res.</div>
 ```ts
-  const fn = async function (args: Args) {
+  const fn = async function (req: Request, res: Response) {
   let sql = 'SELECT * FROM  users limit 5';
-  let results = await args.query(sql);
+  let results = await req.query(sql);
   results = results.map(row => ({
     id: row.id,
     avatar: {
@@ -57,7 +57,7 @@ This function is likely used in a web application to fetch and display a list of
     :'<div class="demo-inactive">Inactive</div>' ,
     },
   }));
-  return args.table(results);
+  return res.table(results);
 };
 ```
 
@@ -67,11 +67,11 @@ This function is likely used in a web application to fetch and display a list of
 
 ### Step 1 - Get the start and end dates from the form
 
-Get the start and end dates from the form: The fn function expects to receive the start and end dates from the form provided in args.form.
+Get the start and end dates from the form: The fn function expects to receive the start and end dates from the form provided in req.form.
 
 ```ts { 2 }
-const fn = async function (args: Args) {
-  const { startDate, endDate } = args.form;
+const fn = async function (req: Request, res: Response) {
+  const { startDate, endDate } = req.form;
 };
 ```
 
@@ -82,8 +82,8 @@ const fn = async function (args: Args) {
 Build the SQL query: Use the provided dates to construct the SQL query that will select the data from the database according to the date range.
 
 ```ts { 3,4,5,6,7,8 }
-const fn = async function (args: Args) {
-  const { startDate, endDate } = args.form;
+const fn = async function (req: Request, res: Response) {
+  const { startDate, endDate } = req.form;
   const sql = `
     SELECT * 
     FROM table 
@@ -97,11 +97,11 @@ const fn = async function (args: Args) {
 
 ### Step 3 - Execute the query and get the results
 
-Execute the query and get the results: Use the query method provided in args to execute the SQL query and get the data from the database.
+Execute the query and get the results: Use the query method provided in req to execute the SQL query and get the data from the database.
 
 ```ts { 10 }
-const fn = async function (args: Args) {
-  const { startDate, endDate } = args.form;
+const fn = async function (req: Request, res: Response) {
+  const { startDate, endDate } = req.form;
   const sql = `
     SELECT * 
     FROM table 
@@ -109,7 +109,7 @@ const fn = async function (args: Args) {
   `;
   const replacements = { startDate, endDate };
 
-  const rows = await args.query(sql, replacements);
+  const rows = await req.query(sql, replacements);
 };
 ```
 
@@ -117,11 +117,11 @@ const fn = async function (args: Args) {
 
 ### Step 4 - Display the results
 
-Display the results: Use the table method provided in args to send the query results as a table response.
+Display the results: Use the table method provided in req to send the query results as a table response.
 
 ```ts {12}
-const fn = async function (args: Args) {
-  const { startDate, endDate } = args.form;
+const fn = async function (req: Request, res: Response) {
+  const { startDate, endDate } = req.form;
   const sql = `
     SELECT * 
     FROM table 
@@ -129,9 +129,9 @@ const fn = async function (args: Args) {
   `;
   const replacements = { startDate, endDate };
 
-  const rows = await args.query(sql, replacements);
+  const rows = await req.query(sql, replacements);
 
-  return args.table(rows);
+  return res.table(rows);
 };
 ```
 

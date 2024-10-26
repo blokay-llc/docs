@@ -6,10 +6,10 @@
   </div>
    <div class="demo-prompt">Show me the count of customers created.</div>
 ```ts
-const fn = async function (args: Args) {
+const fn = async function (req: Request, res: Response) {
   let sql = `SELECT count(1) as quantity FROM users `;
-  let results = await args.find(sql);
-  return args.value(results);
+  let results = await req.find(sql);
+  return res.value(results);
 };
 ```
  
@@ -26,18 +26,18 @@ let sql = `SELECT count(1) as quantity FROM users`;
 
 ---
 
-Execute the SQL query: Use the query method provided in args to execute the SQL query and get the results.
+Execute the SQL query: Use the query method provided in req to execute the SQL query and get the results.
 
 ```ts
-let results = await args.find(sql);
+let results = await req.find(sql);
 ```
 
 ---
 
-Display the chart: Use the value method provided in args to send the formatted data response.
+Display the chart: Use the value method provided in res to send the formatted data response.
 
 ```ts
-return args.value(data);
+return res.value(data);
 ```
 
 ---
@@ -47,10 +47,10 @@ return args.value(data);
 With these steps, you have completed the fn function. Now, when this function is called, it will return a card showing the number of users created. Make sure to adjust the code according to your application's specifications and structure.
 
 ```ts
-const fn = async function (args: Args) {
+const fn = async function (req: Request, res: Response) {
   let sql = `SELECT count(1) as quantity FROM users `;
-  let results = await args.find(sql);
-  return args.value(results);
+  let results = await req.find(sql);
+  return res.value(results);
 };
 ```
 

@@ -1,32 +1,78 @@
-# Get started with Blokay React
+# Integrating Blokay with React Applications
 
-## Install Blokay React
+Blokay is a CDN library that can be included in any web project, regardless of the technology stack. This guide will walk you through the steps to integrate Blokay into your React app.
 
-```bash
-npm install @blokay/react
-```
+## Step 1: Generate Keys and JSON Web Token
 
-## Generate JWT token
+Before integrating Blokay, you need to:
 
-You can generate the current user's session token by defining the logic directly within the Blokay platform.
+- Generate a `publicKey` and `privateKey` through the Blokay dashboard.
+- Use the `privateKey` to create a JSON Web Token (JWT).
 
-See how to [create sessions](https://blokay.com/docs/create-session).
+The JWT should have the following format:
 
-## Now you are ready to use Blokay blocks in your React code.
-
-```tsx {6}
-import { Block } from "@blokay/react";
-
-function Component() {
-  return (
-    <div>
-      <web-component-blokay resource="block.key" />
-    </div>
-  );
+```json
+{
+  "data": {
+    "id": "YOUR_APP_USER_ID",
+    "name": "YOUR_APP_USER_NAME",
+    "extra1": "YOUR_APP_OWN_DATA"
+  }
 }
 ```
 
----
+Replace "YOUR_APP_USER_ID", "YOUR_APP_USER_NAME", and "YOUR_APP_OWN_DATA" with your specific user information.
 
-<Link label="How to create Sessions" href="/docs/create-session" />
-<Link label="How to create ChartLines" href="/docs/show-chart" />
+## Step 2: Add the Blokay Initialization Script
+
+To load Blokay, include its script and configure the component in your project. You can add this in your index.html file or directly in the main React component.
+
+```html
+<script src="https://static.blokay.com/bl/CDN-Blokay.js"></script>
+
+<web-component resource="BlokayResource"></web-component>
+```
+
+## Step 3: Set Up Blokay in React
+
+In your main React file (e.g., App.js), add the following code to initialize Blokay using your publicKey and jwt.
+
+```js
+import { useEffect } from "react";
+
+function App() {
+  useEffect(() => {
+    const loadBlokay = async () => {
+      const bl = new window.Blokay({
+        publicKey: "BLOKAY_PUBLIC_KEY",
+        jwt: "YOUR_JSON_WEB_TOKEN",
+      });
+      bl.load();
+    };
+
+    loadBlokay();
+  }, []);
+
+  return (
+    <div className="App">
+      <h1>Blokay Integration in React</h1>
+      {/* Your content here */}
+      <web-component resource="BlokayResource"></web-component>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Important: Replace "YOUR_JSON_WEB_TOKEN" with the JWT created in Step 1.
+
+## Step 4: Verify Integration
+
+Start your application to ensure Blokay loads correctly. You should see the`<web-component resource="BlokayResource"></web-component>` component functional in your app.
+
+```bash
+npm start
+```
+
+Congratulations! Your React application is now integrated with Blokay.

@@ -6,11 +6,11 @@
   </div>
    <div class="demo-prompt">Show me a graph with the count of customers created per day in the last 30 days.</div>
 ```ts
-  const fn = async function (args: Args) {
+  const fn = async function (req: Request, res: Response) {
   let sql = `SELECT date_format(creationDate, "%m/%Y") as label, count(1) as conteo
     from users WHERE creationDate >= NOW() - interval 30 day orderBy creationDate ASC`;
-  let results = await args.query(sql);
-  return args.chartLine(results);
+  let results = await req.query(sql);
+  return res.chartLine(results);
 };
 ```
  
@@ -30,18 +30,18 @@ from users WHERE creationDate >= NOW() - interval 30 day orderBy creationDate AS
 
 ---
 
-Execute the SQL query: Use the query method provided in args to execute the SQL query and get the results.
+Execute the SQL query: Use the query method provided in req to execute the SQL query and get the results.
 
 ```ts
-let results = await args.query(sql);
+let results = await req.query(sql);
 ```
 
 ---
 
-Display the chart: Use the chartLine method provided in args to send the formatted data as a line chart response.
+Display the chart: Use the chartLine method provided in req to send the formatted data as a line chart response.
 
 ```ts
-return args.chartLine(data);
+return res.chartLine(data);
 ```
 
 ---
@@ -51,11 +51,11 @@ return args.chartLine(data);
 With these steps, you have completed the fn function. Now, when this function is called, it will return a line chart showing the number of users created per month in the last 30 days. Make sure to adjust the code according to your application's specifications and structure.
 
 ```ts
-const fn = async function (args: Args) {
+const fn = async function (req: Request, res: Response) {
   let sql = `SELECT date_format(creationDate, "%m/%Y") as label, count(1) as conteo
     from users WHERE creationDate >= NOW() - interval 30 day orderBy creationDate ASC`;
-  let results = await args.query(sql);
-  return args.chartLine(results);
+  let results = await req.query(sql);
+  return res.chartLine(results);
 };
 ```
 

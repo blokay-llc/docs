@@ -11,12 +11,12 @@ const getJWT = () => {
   return jwt.sign(
     {
       data: {
-        id: this.id,
-        name: this.name,
-        extra1: "YOUR_OWN_DATA",
+        id: "YOUR_APP_USER_ID",
+        name: "YOUR_APP_USER_NAME",
+        extra1: "YOUR_APP_OWN_DATA",
       },
     },
-    `blokay-YOUR-PRIVATE-KEY`, // your private token
+    `secrent-YOUR-PRIVATE-KEY`, // your private token
     {
       expiresIn: "1h", // session expires in
     }
