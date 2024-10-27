@@ -1,7 +1,7 @@
 # Show Tables
 
 <Tabs tabs={["Example", "Prompt",  "Code"]}>
-  <Example block="examples.table"/>
+  <Example block="examples.table" webComponent="table-component"/>
    <div class="demo-prompt">Show me a table of the users.</div>
 ```ts
 const fn = async function (req: Request, res: Response) {
@@ -22,7 +22,7 @@ const fn = async function (req: Request, res: Response) {
 - Result Handling: It passes the query result to the table method of the res parameter and returns the processed res
 
 <Tabs tabs={["Example", "Prompt",  "Code"]}>
-  <Example block="examples.form"/>
+  <Example block="examples.form" webComponent="table-component"/>
    <div class="demo-prompt">Show me a table of the users created between the given dates.</div>
 ```ts
 const fn = async function (req: Request, res: Response) {
@@ -40,7 +40,7 @@ const fn = async function (req: Request, res: Response) {
 This function is likely used in a web application to fetch and display a list of users in a formatted table, including visual indicators for user status and avatars. The function leverages asynchronous operations to handle database queries and processes the data into a structure suitable for frontend display.
 
 <Tabs tabs={["Example", "Prompt",  "Code"]}>
-  <Example block="examples.table.html"/>
+  <Example block="examples.table.html" webComponent="table-component"/>
    <div class="demo-prompt">Show me the users id, email, an HTML avatar (first letter of the name), and an HTML status (active or inactive), then returns the results using a table method provided in the res.</div>
 ```ts
   const fn = async function (req: Request, res: Response) {
